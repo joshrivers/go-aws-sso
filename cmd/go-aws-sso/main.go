@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -171,6 +172,7 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
+		log.Println(err)
 		panic(err)
 		zap.S().Fatal(err)
 	}
@@ -231,6 +233,7 @@ func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoif
 
 func check(err error) {
 	if err != nil {
+		log.Println(err)
 		panic(err)
 		zap.S().Fatalf("Something went wrong: %q", err)
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path"
 
@@ -123,6 +124,7 @@ func WriteStructToFile(payload interface{}, dest string) {
 
 func check(err error) {
 	if err != nil {
+		log.Println(lockedAuthFlowMsg)
 		panic(lockedAuthFlowMsg)
 		zap.S().Fatalf("Something went wrong: %q", err)
 	}
