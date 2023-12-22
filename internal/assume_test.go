@@ -56,6 +56,16 @@ func TestAssumeDirectly(t *testing.T) {
 		t.Error(err)
 	}
 	CredentialsFilePath = temp.Name()
+	defer func(path string) {
+		t.Log("wat", path)
+		if r := recover(); r != nil {
+			t.Log("Recovered in f", r)
+		}
+		err := os.RemoveAll(path)
+		if err != nil {
+			t.Error(err)
+		}
+	}(CredentialsFilePath)
 	t.Log("TestAssumeDirectly", CredentialsFilePath)
 
 	dummyInt := int64(132465)
@@ -116,16 +126,6 @@ func TestAssumeDirectly(t *testing.T) {
 		t.Error(err)
 	}
 	t.Log("TestAssumeDirectly", CredentialsFilePath)
-	defer func(path string) {
-		t.Log("wat", path)
-		if r := recover(); r != nil {
-			t.Log("Recovered in f", r)
-		}
-		err := os.RemoveAll(path)
-		if err != nil {
-			t.Error(err)
-		}
-	}(CredentialsFilePath)
 	t.Log("TestAssumeDirectly")
 	got := string(content)
 	t.Log("TestAssumeDirectly")
