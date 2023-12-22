@@ -20,7 +20,9 @@ func TestWriteConfig(t *testing.T) {
 	defer func(file string) {
 		dir := path.Dir(file)
 		err := os.RemoveAll(dir)
-		fail(err, t)
+		if err != nil {
+			t.Error(err)
+		}
 	}(tempFile)
 
 	flagSet := flag.NewFlagSet("path", flag.ContinueOnError)

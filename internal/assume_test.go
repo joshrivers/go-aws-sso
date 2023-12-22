@@ -98,8 +98,16 @@ func TestAssumeDirectly(t *testing.T) {
 
 	AssumeDirectly(oidcClient, ssoClient, ctx)
 
-	content, _ := os.ReadFile(CredentialsFilePath)
-	defer os.RemoveAll(CredentialsFilePath)
+	content, err := os.ReadFile(CredentialsFilePath)
+	if err != nil {
+		t.Error(err)
+	}
+	defer func(path string) {
+		err := os.RemoveAll(path)
+		if err != nil {
+			t.Error(err)
+		}
+	}(CredentialsFilePath)
 	got := string(content)
 	want := "[default]\naws_access_key_id     = dummy_assume_directly\naws_secret_access_key = dummy_assume_directly\naws_session_token     = dummy_assume_directly\nregion                = eu-central-1\n"
 
