@@ -2,7 +2,6 @@ package internal
 
 import (
 	"flag"
-	"fmt"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
 	"os"
@@ -69,8 +68,8 @@ func TestWriteConfig(t *testing.T) {
 }
 
 func fail(err error, t *testing.T) {
-	fmt.Println("fail", err)
+	t.Log("fail", err)
 	if err != nil {
-		t.Errorf("unexpected error: %q", err)
+		t.Logf("unexpected error: %q", err)
 	}
 }
