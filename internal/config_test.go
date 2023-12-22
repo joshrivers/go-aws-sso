@@ -12,6 +12,8 @@ import (
 )
 
 func TestWriteConfig(t *testing.T) {
+	t.Log("TestWriteConfig")
+
 	type args struct {
 		context *cli.Context
 	}

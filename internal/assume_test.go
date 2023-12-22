@@ -44,7 +44,7 @@ func (m mockSSOClient) GetRoleCredentials(*sso.GetRoleCredentialsInput) (*sso.Ge
 }
 
 func TestAssumeDirectly(t *testing.T) {
-
+	t.Log("TestAssumeDirectly")
 	temp, err := os.CreateTemp("", "go-aws-sso-assume-directly_")
 	if err != nil {
 		t.Error(err)
