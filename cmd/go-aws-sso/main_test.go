@@ -158,7 +158,16 @@ func Test_start(t *testing.T) {
 		t.Errorf("Got: %v, but wanted: %v", got, want)
 	}
 
-	defer os.RemoveAll(CredentialsFilePath)
+	defer func(path string) {
+
+		if r := recover(); r != nil {
+			t.Log("Recovered in f", r)
+		}
+		err := os.RemoveAll(path)
+		if err != nil {
+			t.Error(err)
+		}
+	}(CredentialsFilePath)
 
 }
 

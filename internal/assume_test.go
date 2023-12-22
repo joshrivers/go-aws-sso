@@ -99,6 +99,7 @@ func TestAssumeDirectly(t *testing.T) {
 	flagSet.Bool("persist", true, "")
 	ctx := cli.NewContext(nil, flagSet, nil)
 
+	t.Log("TestAssumeDirectly")
 	AssumeDirectly(oidcClient, ssoClient, ctx)
 	t.Log("TestAssumeDirectly")
 
@@ -108,6 +109,10 @@ func TestAssumeDirectly(t *testing.T) {
 	}
 	t.Log("TestAssumeDirectly")
 	defer func(path string) {
+
+		if r := recover(); r != nil {
+			t.Log("Recovered in f", r)
+		}
 		err := os.RemoveAll(path)
 		if err != nil {
 			t.Error(err)

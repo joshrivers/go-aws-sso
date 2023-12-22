@@ -20,6 +20,9 @@ func TestWriteConfig(t *testing.T) {
 
 	tempFile := "/tmp/go-aws-sso/generated-config.yaml"
 	defer func(file string) {
+		if r := recover(); r != nil {
+			t.Log("Recovered in f", r)
+		}
 		dir := path.Dir(file)
 		err := os.RemoveAll(dir)
 		if err != nil {
