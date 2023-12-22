@@ -246,6 +246,10 @@ func retrieveToken(client ssooidciface.SSOOIDCAPI, timer Timer, info *ClientInfo
 	}
 }
 
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
+
 type lockfile struct {
 	LockTime time.Time `json:"lockTime"`
 }

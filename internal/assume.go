@@ -13,6 +13,10 @@ import (
 	"go.uber.org/zap"
 )
 
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
+
 // AssumeDirectly
 // Directly assumes into a certain account and role, bypassing the prompt and interactive selection.
 func AssumeDirectly(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, context *cli.Context) {

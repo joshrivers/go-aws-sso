@@ -85,6 +85,10 @@ func recreateSection(template *CredentialsFileTemplate, profile string, cfg *ini
 	err = sec.ReflectFrom(template)
 }
 
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
+
 // isFileOrFolderExisting
 // Checks either or not a target file is existing.
 // Returns true if the target exists, otherwise false.

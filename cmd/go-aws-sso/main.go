@@ -228,6 +228,9 @@ func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoif
 	return clientInformation, accountInfo
 }
 
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
 func check(err error) {
 	if err != nil {
 		zap.S().Panicf("Something went wrong: %q", err)
