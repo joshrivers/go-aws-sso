@@ -22,6 +22,7 @@ func AssumeDirectly(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAP
 	clientInformation := ProcessClientInformation(oidcClient, startUrl)
 	rci := &sso.GetRoleCredentialsInput{AccountId: &accountId, RoleName: &roleName, AccessToken: &clientInformation.AccessToken}
 	roleCredentials, err := ssoClient.GetRoleCredentials(rci)
+
 	check(err)
 
 	if context.Bool("persist") {
