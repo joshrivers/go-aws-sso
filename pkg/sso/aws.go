@@ -105,7 +105,7 @@ func (ati ClientInformation) isExpired() bool {
 // When the ClientInformation.AccessToken is expired, it starts retrieving a new AccessToken
 func ProcessClientInformation(oidcClient ssooidciface.SSOOIDCAPI, startUrl string) ClientInformation {
 	if isAuthorizationFlowLocked() {
-		zap.S().Fatal(lockedAuthFlowMsg)
+		zap.S().Fatal(lockedAuthFlowMsg + "108")
 	}
 
 	clientInformation, err := ReadClientInformation(ClientInfoFileDestination())
@@ -120,7 +120,7 @@ func ProcessClientInformation(oidcClient ssooidciface.SSOOIDCAPI, startUrl strin
 		clientInformation = *clientInfoPointer
 	} else if clientInformation.isExpired() {
 		if isAuthorizationFlowLocked() {
-			zap.S().Fatal(lockedAuthFlowMsg)
+			zap.S().Fatal(lockedAuthFlowMsg + "123")
 		} else {
 			lockAuthorizationFlow()
 			defer unlockAuthorizationFlow()
