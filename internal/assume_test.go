@@ -50,6 +50,7 @@ func TestAssumeDirectly(t *testing.T) {
 		t.Error(err)
 	}
 	CredentialsFilePath = temp.Name()
+	t.Log("TestAssumeDirectly")
 
 	dummyInt := int64(132465)
 	dummy := "dummy_assume_directly"
@@ -64,6 +65,7 @@ func TestAssumeDirectly(t *testing.T) {
 			SessionToken:    &dummy,
 		}},
 	}
+	t.Log("TestAssumeDirectly")
 
 	expires := int64(0)
 
@@ -87,6 +89,7 @@ func TestAssumeDirectly(t *testing.T) {
 		},
 	}
 
+	t.Log("TestAssumeDirectly")
 	flagSet := flag.NewFlagSet("test-set", flag.ContinueOnError)
 	flagSet.String("start-url", "foobar", "")
 	flagSet.String("region", "eu-central-1", "")
@@ -97,22 +100,28 @@ func TestAssumeDirectly(t *testing.T) {
 	ctx := cli.NewContext(nil, flagSet, nil)
 
 	AssumeDirectly(oidcClient, ssoClient, ctx)
+	t.Log("TestAssumeDirectly")
 
 	content, err := os.ReadFile(CredentialsFilePath)
 	if err != nil {
 		t.Error(err)
 	}
+	t.Log("TestAssumeDirectly")
 	defer func(path string) {
 		err := os.RemoveAll(path)
 		if err != nil {
 			t.Error(err)
 		}
 	}(CredentialsFilePath)
+	t.Log("TestAssumeDirectly")
 	got := string(content)
+	t.Log("TestAssumeDirectly")
 	want := "[default]\naws_access_key_id     = dummy_assume_directly\naws_secret_access_key = dummy_assume_directly\naws_session_token     = dummy_assume_directly\nregion                = eu-central-1\n"
 
+	t.Log("TestAssumeDirectly")
 	if got != want {
 		t.Errorf("Got: %v, but wanted: %v", got, want)
 	}
+	t.Log("TestAssumeDirectly")
 
 }
