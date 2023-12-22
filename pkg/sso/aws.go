@@ -280,6 +280,7 @@ func isAuthorizationFlowLocked() bool {
 			return false
 		}
 		zap.S().Error("Something went wrong while reading the temporary lock file", err)
+		return false
 	}
 	lf := lockfile{}
 	err = json.Unmarshal(lockBytes, &lf)
