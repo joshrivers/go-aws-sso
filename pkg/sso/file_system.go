@@ -123,6 +123,6 @@ func WriteStructToFile(payload interface{}, dest string) {
 
 func check(err error) {
 	if err != nil {
-		zap.S().Fatalf("Something went wrong: %q", err)
+		zap.S().Panicf("Something went wrong: %q", err)
 	}
 }

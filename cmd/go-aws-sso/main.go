@@ -171,7 +171,7 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
-		zap.S().Fatal(err)
+		zap.S().Panic(err)
 	}
 }
 
@@ -230,7 +230,7 @@ func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoif
 
 func check(err error) {
 	if err != nil {
-		zap.S().Fatalf("Something went wrong: %q", err)
+		zap.S().Panicf("Something went wrong: %q", err)
 	}
 }
 

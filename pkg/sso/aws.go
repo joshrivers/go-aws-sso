@@ -105,7 +105,7 @@ func (ati ClientInformation) isExpired() bool {
 // When the ClientInformation.AccessToken is expired, it starts retrieving a new AccessToken
 func ProcessClientInformation(oidcClient ssooidciface.SSOOIDCAPI, startUrl string) ClientInformation {
 	if isAuthorizationFlowLocked() {
-		zap.S().Fatal(lockedAuthFlowMsg)
+		zap.S().Panic(lockedAuthFlowMsg)
 	}
 
 	clientInformation, err := ReadClientInformation(ClientInfoFileDestination())
@@ -120,7 +120,7 @@ func ProcessClientInformation(oidcClient ssooidciface.SSOOIDCAPI, startUrl strin
 		clientInformation = *clientInfoPointer
 	} else if clientInformation.isExpired() {
 		if isAuthorizationFlowLocked() {
-			zap.S().Fatal(lockedAuthFlowMsg)
+			zap.S().Panic(lockedAuthFlowMsg)
 		} else {
 			lockAuthorizationFlow()
 			defer unlockAuthorizationFlow()
@@ -181,7 +181,7 @@ func openUrlInBrowser(url string) {
 		zap.S().Debugf("using BROWSER environment variable: %s", env)
 		err = exec.Command(env, url).Start()
 		if err != nil {
-			zap.S().Fatalf("error while opening browser: %s", err)
+			zap.S().Panicf("error while opening browser: %s", err)
 		}
 		return
 	}
@@ -235,7 +235,7 @@ func retrieveToken(client ssooidciface.SSOOIDCAPI, timer Timer, info *ClientInfo
 					time.Sleep(3 * time.Second)
 					continue
 				} else {
-					zap.S().Fatal(err)
+					zap.S().Panic(err)
 				}
 			}
 		} else {
