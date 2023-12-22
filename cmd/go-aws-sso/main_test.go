@@ -156,7 +156,10 @@ func Test_start(t *testing.T) {
 		t.Errorf("Got: %v, but wanted: %v", got, want)
 	}
 
-	defer os.RemoveAll(CredentialsFilePath)
+	defer func(path string) {
+		os.RemoveAll(path)
+		os.Remove(os.TempDir() + "/go-aws-sso.lock")
+	}(CredentialsFilePath)
 
 }
 
