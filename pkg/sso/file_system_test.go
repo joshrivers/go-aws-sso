@@ -2,6 +2,7 @@ package sso
 
 import (
 	"encoding/json"
+	"go.uber.org/zap"
 	"gopkg.in/ini.v1"
 	"os"
 	"reflect"
@@ -87,7 +88,9 @@ func TestWriteClientInfoToFile(t *testing.T) {
 		})
 	}
 }
-
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
 func createTempFolder() string {
 	temp, err := os.MkdirTemp("", "write-client-info-test")
 	check(err)

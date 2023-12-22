@@ -61,7 +61,9 @@ type mockTime struct {
 func (t mockTime) Now() time.Time {
 	return time.Date(2021, 01, 01, 00, 00, 00, 00, &time.Location{})
 }
-
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
 func Test_start(t *testing.T) {
 
 	temp, err := os.CreateTemp("", "go-aws-sso_start")

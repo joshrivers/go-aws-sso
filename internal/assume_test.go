@@ -2,6 +2,7 @@ package internal
 
 import (
 	"flag"
+	"go.uber.org/zap"
 	"os"
 	"testing"
 
@@ -42,7 +43,9 @@ type mockSSOClient struct {
 func (m mockSSOClient) GetRoleCredentials(*sso.GetRoleCredentialsInput) (*sso.GetRoleCredentialsOutput, error) {
 	return &m.GetRoleCredentialsOutput, nil
 }
-
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
+}
 func TestAssumeDirectly(t *testing.T) {
 
 	temp, err := os.CreateTemp("", "go-aws-sso-assume-directly_")

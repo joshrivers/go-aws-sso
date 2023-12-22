@@ -3,6 +3,7 @@ package internal
 import (
 	"flag"
 	"github.com/urfave/cli/v2"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path"
@@ -63,6 +64,9 @@ func TestWriteConfig(t *testing.T) {
 			}
 		})
 	}
+}
+func init() {
+	zap.ReplaceGlobals(zap.NewExample())
 }
 
 func fail(err error, t *testing.T) {
