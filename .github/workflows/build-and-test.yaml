@@ -2,13 +2,6 @@ name: Build & Test
 
 on:
   push:
-    branches:
-      - debug*
-    paths:
-      - '**.go'
-      - 'go.mod'
-      - 'go.sum'
-      - '.github/workflows/build-and-test.yaml'
 
 jobs:
   build:
