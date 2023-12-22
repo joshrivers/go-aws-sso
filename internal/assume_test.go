@@ -46,7 +46,9 @@ func (m mockSSOClient) GetRoleCredentials(*sso.GetRoleCredentialsInput) (*sso.Ge
 func TestAssumeDirectly(t *testing.T) {
 
 	temp, err := os.CreateTemp("", "go-aws-sso-assume-directly_")
-	check(err)
+	if err != nil {
+		t.Error(err)
+	}
 	CredentialsFilePath = temp.Name()
 
 	dummyInt := int64(132465)

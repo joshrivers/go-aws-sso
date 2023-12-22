@@ -65,7 +65,9 @@ func (t mockTime) Now() time.Time {
 func Test_start(t *testing.T) {
 
 	temp, err := os.CreateTemp("", "go-aws-sso_start")
-	check(err)
+	if err != nil {
+		t.Error(err)
+	}
 	CredentialsFilePath = temp.Name()
 
 	dummyInt := int64(132465)
