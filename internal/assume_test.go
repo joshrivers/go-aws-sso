@@ -107,9 +107,9 @@ func TestAssumeDirectly(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Log("TestAssumeDirectly")
+	t.Log("TestAssumeDirectly", CredentialsFilePath)
 	defer func(path string) {
-		t.Log("wat")
+		t.Log("wat", path)
 		if r := recover(); r != nil {
 			t.Log("Recovered in f", r)
 		}

@@ -69,7 +69,7 @@ func Test_start(t *testing.T) {
 		t.Error(err)
 	}
 	CredentialsFilePath = temp.Name()
-
+	t.Log("main", CredentialsFilePath)
 	dummyInt := int64(132465)
 	dummy := "dummy"
 	accessToken := "AccessToken"
@@ -150,7 +150,10 @@ func Test_start(t *testing.T) {
 
 	start(oidcClient, ssoClient, newContext, selector)
 
-	content, _ := os.ReadFile(CredentialsFilePath)
+	content, err := os.ReadFile(CredentialsFilePath)
+	if err != nil {
+		t.Log(err)
+	}
 	got := string(content)
 	want := "[default]\naws_access_key_id     = dummy\naws_secret_access_key = dummy\naws_session_token     = dummy\nregion                = eu-central-1\n"
 
@@ -159,7 +162,7 @@ func Test_start(t *testing.T) {
 	}
 
 	defer func(path string) {
-		t.Log("wat")
+		t.Log("wat", path)
 		if r := recover(); r != nil {
 			t.Log("Recovered in f", r)
 		}
