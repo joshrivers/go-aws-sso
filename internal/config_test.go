@@ -4,7 +4,6 @@ import (
 	"flag"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
@@ -52,7 +51,7 @@ func TestWriteConfig(t *testing.T) {
 			configFile, err := os.Open(tempFile)
 			fail(err, t)
 
-			bytes, err := ioutil.ReadFile(configFile.Name())
+			bytes, err := os.ReadFile(configFile.Name())
 			fail(err, t)
 
 			gotAppConfig := AppConfig{}
@@ -60,7 +59,7 @@ func TestWriteConfig(t *testing.T) {
 			fail(err, t)
 
 			if !reflect.DeepEqual(gotAppConfig, wantAppConfig) {
-				t.Log("got: %q, want: %q", gotAppConfig, wantAppConfig)
+				t.Logf("got: %q, want: %q", gotAppConfig, wantAppConfig)
 			}
 		})
 	}
@@ -68,6 +67,6 @@ func TestWriteConfig(t *testing.T) {
 
 func fail(err error, t *testing.T) {
 	if err != nil {
-		t.Log("unexpected error: %q", err)
+		t.Logf("unexpected error: %q", err)
 	}
 }
