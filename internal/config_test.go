@@ -51,14 +51,14 @@ func TestWriteConfig(t *testing.T) {
 			}
 
 			configFile, err := os.Open(tempFile)
-			fail(err, t)
+			fail(err, t, "54")
 
 			bytes, err := os.ReadFile(configFile.Name())
-			fail(err, t)
+			fail(err, t, "57")
 
 			gotAppConfig := AppConfig{}
 			err = yaml.Unmarshal(bytes, &gotAppConfig)
-			fail(err, t)
+			fail(err, t, "61")
 
 			if !reflect.DeepEqual(gotAppConfig, wantAppConfig) {
 				t.Errorf("got: %q, want: %q", gotAppConfig, wantAppConfig)
@@ -67,8 +67,8 @@ func TestWriteConfig(t *testing.T) {
 	}
 }
 
-func fail(err error, t *testing.T) {
-	t.Log("fail", err)
+func fail(err error, t *testing.T, extra string) {
+	t.Log("fail", err, extra)
 	if err != nil {
 		t.Logf("unexpected error: %q", err)
 	}
