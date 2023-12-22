@@ -47,7 +47,7 @@ func init() {
 	zap.ReplaceGlobals(zap.NewExample())
 }
 func TestAssumeDirectly(t *testing.T) {
-
+	os.Remove(os.TempDir() + "/go-aws-sso.lock")
 	temp, err := os.CreateTemp("", "go-aws-sso-assume-directly_")
 	check(err)
 	CredentialsFilePath = temp.Name()

@@ -65,7 +65,7 @@ func init() {
 	zap.ReplaceGlobals(zap.NewExample())
 }
 func Test_start(t *testing.T) {
-
+	os.Remove(os.TempDir() + "/go-aws-sso.lock")
 	temp, err := os.CreateTemp("", "go-aws-sso_start")
 	check(err)
 	CredentialsFilePath = temp.Name()
