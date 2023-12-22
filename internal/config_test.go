@@ -38,6 +38,11 @@ func TestWriteConfig(t *testing.T) {
 			args:    args{context: cli.NewContext(nil, flagSet, nil)},
 			wantErr: false,
 		},
+		{
+			name:    "Should create another config file",
+			args:    args{context: cli.NewContext(nil, flagSet, nil)},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
