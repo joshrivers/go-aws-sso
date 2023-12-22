@@ -70,6 +70,6 @@ func TestWriteConfig(t *testing.T) {
 func fail(err error, t *testing.T, extra string) {
 	t.Log("fail", err, extra)
 	if err != nil {
-		t.Logf("unexpected error: %q", err)
+		t.Errorf("unexpected error: %q", err)
 	}
 }
