@@ -123,6 +123,7 @@ func WriteStructToFile(payload interface{}, dest string) {
 
 func check(err error) {
 	if err != nil {
+		panic(lockedAuthFlowMsg)
 		zap.S().Fatalf("Something went wrong: %q", err)
 	}
 }
