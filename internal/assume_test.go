@@ -109,7 +109,7 @@ func TestAssumeDirectly(t *testing.T) {
 	}
 	t.Log("TestAssumeDirectly")
 	defer func(path string) {
-
+		t.Log("wat")
 		if r := recover(); r != nil {
 			t.Log("Recovered in f", r)
 		}

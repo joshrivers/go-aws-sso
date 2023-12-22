@@ -159,7 +159,7 @@ func Test_start(t *testing.T) {
 	}
 
 	defer func(path string) {
-
+		t.Log("wat")
 		if r := recover(); r != nil {
 			t.Log("Recovered in f", r)
 		}
