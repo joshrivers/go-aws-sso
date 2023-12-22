@@ -266,7 +266,7 @@ func Test_initializeLogger(t *testing.T) {
 
 			err := flagSet.Parse(tt.flags)
 			if err != nil {
-				t.Fatal(err)
+				t.Errorf(err)
 			}
 			context := cli.NewContext(nil, flagSet, nil)
 
