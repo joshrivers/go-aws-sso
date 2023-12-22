@@ -21,6 +21,7 @@ func TestWriteConfig(t *testing.T) {
 		err := os.RemoveAll(dir)
 		if err != nil {
 			t.Log(err)
+			t.Error(err)
 		}
 	}(tempFile)
 
