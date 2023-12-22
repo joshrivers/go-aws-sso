@@ -14,32 +14,38 @@ import (
 )
 
 type mockSSOOIDCClient struct {
+	t *testing.T
 	ssooidciface.SSOOIDCAPI
 	CreateTokenOutput              ssooidc.CreateTokenOutput
 	RegisterClientOutput           ssooidc.RegisterClientOutput
 	StartDeviceAuthorizationOutput ssooidc.StartDeviceAuthorizationOutput
 }
 
-func (m mockSSOOIDCClient) CreateToken(_ *ssooidc.CreateTokenInput) (*ssooidc.CreateTokenOutput, error) {
+func (m mockSSOOIDCClient) CreateToken(i *ssooidc.CreateTokenInput) (*ssooidc.CreateTokenOutput, error) {
+	m.t.Log(i)
 	return &m.CreateTokenOutput, nil
 }
 
-func (m mockSSOOIDCClient) StartDeviceAuthorization(_ *ssooidc.StartDeviceAuthorizationInput) (*ssooidc.StartDeviceAuthorizationOutput, error) {
+func (m mockSSOOIDCClient) StartDeviceAuthorization(i *ssooidc.StartDeviceAuthorizationInput) (*ssooidc.StartDeviceAuthorizationOutput, error) {
+	m.t.Log(i)
 	return &m.StartDeviceAuthorizationOutput, nil
 }
 
-func (m mockSSOOIDCClient) RegisterClient(*ssooidc.RegisterClientInput) (*ssooidc.RegisterClientOutput, error) {
+func (m mockSSOOIDCClient) RegisterClient(i *ssooidc.RegisterClientInput) (*ssooidc.RegisterClientOutput, error) {
+	m.t.Log(i)
 	return &m.RegisterClientOutput, nil
 }
 
 type mockSSOClient struct {
+	t *testing.T
 	ssoiface.SSOAPI
 	GetRoleCredentialsOutput sso.GetRoleCredentialsOutput
 	ListAccountRolesOutput   sso.ListAccountRolesOutput
 	ListAccountsOutput       sso.ListAccountsOutput
 }
 
-func (m mockSSOClient) GetRoleCredentials(*sso.GetRoleCredentialsInput) (*sso.GetRoleCredentialsOutput, error) {
+func (m mockSSOClient) GetRoleCredentials(i *sso.GetRoleCredentialsInput) (*sso.GetRoleCredentialsOutput, error) {
+	m.t.Log(i)
 	return &m.GetRoleCredentialsOutput, nil
 }
 
@@ -50,13 +56,14 @@ func TestAssumeDirectly(t *testing.T) {
 		t.Error(err)
 	}
 	CredentialsFilePath = temp.Name()
-	t.Log("TestAssumeDirectly")
+	t.Log("TestAssumeDirectly", CredentialsFilePath)
 
 	dummyInt := int64(132465)
 	dummy := "dummy_assume_directly"
 	accessToken := "AccessToken"
 
 	ssoClient := mockSSOClient{
+		t:      t,
 		SSOAPI: nil,
 		GetRoleCredentialsOutput: sso.GetRoleCredentialsOutput{RoleCredentials: &sso.RoleCredentials{
 			AccessKeyId:     &dummy,
@@ -70,6 +77,7 @@ func TestAssumeDirectly(t *testing.T) {
 	expires := int64(0)
 
 	oidcClient := mockSSOOIDCClient{
+		t:          t,
 		SSOOIDCAPI: nil,
 		CreateTokenOutput: ssooidc.CreateTokenOutput{
 			AccessToken: &accessToken,
