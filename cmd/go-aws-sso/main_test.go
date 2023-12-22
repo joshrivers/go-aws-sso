@@ -65,7 +65,9 @@ func (t mockTime) Now() time.Time {
 func Test_start(t *testing.T) {
 
 	temp, err := os.CreateTemp("", "go-aws-sso_start")
-	check(err)
+	if err != nil {
+		t.Error(err)
+	}
 	CredentialsFilePath = temp.Name()
 
 	dummyInt := int64(132465)
@@ -148,7 +150,10 @@ func Test_start(t *testing.T) {
 
 	start(oidcClient, ssoClient, newContext, selector)
 
-	content, _ := os.ReadFile(CredentialsFilePath)
+	content, err := os.ReadFile(CredentialsFilePath)
+	if err != nil {
+		t.Error(err)
+	}
 	got := string(content)
 	want := "[default]\naws_access_key_id     = dummy\naws_secret_access_key = dummy\naws_session_token     = dummy\nregion                = eu-central-1\n"
 
@@ -156,7 +161,13 @@ func Test_start(t *testing.T) {
 		t.Errorf("Got: %v, but wanted: %v", got, want)
 	}
 
-	defer os.RemoveAll(CredentialsFilePath)
+	defer func() {
+		err := os.RemoveAll(CredentialsFilePath)
+		if err != nil {
+			t.Log(err)
+			t.Error(err)
+		}
+	}()
 
 }
 
@@ -266,7 +277,7 @@ func Test_initializeLogger(t *testing.T) {
 
 			err := flagSet.Parse(tt.flags)
 			if err != nil {
-				t.Fatal(err)
+				t.Error(err)
 			}
 			context := cli.NewContext(nil, flagSet, nil)
 
