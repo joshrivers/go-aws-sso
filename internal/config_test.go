@@ -19,6 +19,7 @@ func TestWriteConfig(t *testing.T) {
 	defer func(file string) {
 		dir := path.Dir(file)
 		err := os.RemoveAll(dir)
+		t.Log(file)
 		if err != nil {
 			t.Log(err)
 			t.Error(err)

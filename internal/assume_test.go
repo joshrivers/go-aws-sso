@@ -104,6 +104,7 @@ func TestAssumeDirectly(t *testing.T) {
 	}
 	defer func() {
 		err := os.RemoveAll(CredentialsFilePath)
+		t.Log("cleanup")
 		if err != nil {
 			t.Log(err)
 		}
@@ -111,6 +112,7 @@ func TestAssumeDirectly(t *testing.T) {
 	got := string(content)
 	want := "[default]\naws_access_key_id     = dummy_assume_directly\naws_secret_access_key = dummy_assume_directly\naws_session_token     = dummy_assume_directly\nregion                = eu-central-1\n"
 
+	t.Log("114")
 	if got != want {
 		t.Errorf("Got: %v, but wanted: %v", got, want)
 	}
