@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
+	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
@@ -19,10 +20,7 @@ func TestWriteConfig(t *testing.T) {
 	defer func(file string) {
 		dir := path.Dir(file)
 		err := os.RemoveAll(dir)
-		if err != nil {
-			t.Log(err)
-			t.Error(err)
-		}
+		fail(err, t)
 	}(tempFile)
 
 	flagSet := flag.NewFlagSet("path", flag.ContinueOnError)
@@ -52,14 +50,14 @@ func TestWriteConfig(t *testing.T) {
 			}
 
 			configFile, err := os.Open(tempFile)
-			fail(err, t, "54")
+			fail(err, t)
 
-			bytes, err := os.ReadFile(configFile.Name())
-			fail(err, t, "57")
+			bytes, err := ioutil.ReadFile(configFile.Name())
+			fail(err, t)
 
 			gotAppConfig := AppConfig{}
 			err = yaml.Unmarshal(bytes, &gotAppConfig)
-			fail(err, t, "61")
+			fail(err, t)
 
 			if !reflect.DeepEqual(gotAppConfig, wantAppConfig) {
 				t.Errorf("got: %q, want: %q", gotAppConfig, wantAppConfig)
@@ -68,8 +66,7 @@ func TestWriteConfig(t *testing.T) {
 	}
 }
 
-func fail(err error, t *testing.T, extra string) {
-	t.Log("fail", err, extra)
+func fail(err error, t *testing.T) {
 	if err != nil {
 		t.Errorf("unexpected error: %q", err)
 	}
