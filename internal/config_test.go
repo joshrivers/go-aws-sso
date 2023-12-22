@@ -30,6 +30,7 @@ func TestWriteConfig(t *testing.T) {
 			t.Error(err)
 		}
 	}(tempFile)
+	t.Log("TestWriteConfig", tempFile)
 
 	flagSet := flag.NewFlagSet("path", flag.ContinueOnError)
 	flagSet.String("path", tempFile, "")
@@ -44,29 +45,36 @@ func TestWriteConfig(t *testing.T) {
 			wantErr: false,
 		},
 	}
+	t.Log("TestWriteConfig")
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Log("TestWriteConfig")
 
 			wantAppConfig := AppConfig{
 				StartUrl: "https://my-login.awsapps.com/start#/",
 				Region:   "eu-central-1",
 			}
 
+			t.Log("TestWriteConfig")
 			got := writeConfig(tempFile, wantAppConfig)
 			if got != nil {
 				t.Errorf("Not expected: %q", got)
 			}
 
+			t.Log("TestWriteConfig")
 			configFile, err := os.Open(tempFile)
 			fail(err, t)
 
 			bytes, err := ioutil.ReadFile(configFile.Name())
 			fail(err, t)
 
+			t.Log("TestWriteConfig")
 			gotAppConfig := AppConfig{}
 			err = yaml.Unmarshal(bytes, &gotAppConfig)
 			fail(err, t)
 
+			t.Log("TestWriteConfig")
 			if !reflect.DeepEqual(gotAppConfig, wantAppConfig) {
 				t.Errorf("got: %q, want: %q", gotAppConfig, wantAppConfig)
 			}
@@ -75,6 +83,7 @@ func TestWriteConfig(t *testing.T) {
 }
 
 func fail(err error, t *testing.T) {
+	t.Log("fail", err)
 	if err != nil {
 		t.Errorf("unexpected error: %q", err)
 	}
