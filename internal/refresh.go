@@ -23,9 +23,10 @@ type LastUsageInformation struct {
 func RefreshCredentials(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, context *cli.Context) {
 
 	startUrl := context.String("start-url")
-	clientInformation, err := ReadClientInformation(ClientInfoFileDestination())
+	accessTokenFile := context.String("session-cache-file")
+	clientInformation, err := ReadClientInformation(accessTokenFile)
 	if err != nil || clientInformation.StartUrl != startUrl {
-		clientInformation = ProcessClientInformation(oidcClient, startUrl)
+		clientInformation = ProcessClientInformation(oidcClient, startUrl, accessTokenFile)
 	}
 
 	zap.S().Infof("Using Start URL %s", clientInformation.StartUrl)
@@ -40,7 +41,7 @@ func RefreshCredentials(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.S
 			zap.S().Info("Nothing to refresh yet")
 			accountInfo, awsErr := RetrieveAccountInfo(clientInformation, ssoClient, Prompter{})
 			if awsErr != nil && awsErr.StatusCode() == 401 { // unauthorized
-				clientInformation, accountInfo = retryWithNewClientCreds(oidcClient, ssoClient, startUrl)
+				clientInformation, accountInfo = retryWithNewClientCreds(oidcClient, ssoClient, startUrl, accessTokenFile)
 			}
 			roleInfo := RetrieveRoleInfo(accountInfo, clientInformation, ssoClient, Prompter{})
 			roleName = roleInfo.RoleName
@@ -64,10 +65,10 @@ func RefreshCredentials(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.S
 	zap.S().Infof("Credentials expire at: %s\n", time.Unix(*roleCredentials.RoleCredentials.Expiration/1000, 0))
 }
 
-func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, startUrl string) (ClientInformation, *sso.AccountInfo) {
-	osErr := os.Remove(ClientInfoFileDestination())
+func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, startUrl string, accessTokenFile string) (ClientInformation, *sso.AccountInfo) {
+	osErr := os.Remove(accessTokenFile)
 	check(osErr)
-	clientInformation := ProcessClientInformation(oidcClient, startUrl)
+	clientInformation := ProcessClientInformation(oidcClient, startUrl, accessTokenFile)
 	accountInfo, awsErr := RetrieveAccountInfo(clientInformation, ssoClient, Prompter{})
 	check(awsErr)
 	return clientInformation, accountInfo

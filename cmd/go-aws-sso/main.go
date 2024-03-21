@@ -63,6 +63,12 @@ func main() {
 			Hidden:   false,
 			Required: false,
 		},
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:     "session-cache-file",
+			Value:    AccessTokenFileDestination(),
+			Usage:    "File name to store SSO session data (defaults to...)",
+			Required: false,
+		}),
 	}
 
 	initialFlags = append(configFlags, initialFlags...)
@@ -194,11 +200,12 @@ func readConfigFile(flags []cli.Flag) cli.BeforeFunc {
 func start(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, context *cli.Context, promptSelector Prompt) {
 
 	startUrl := context.String("start-url")
-	clientInformation := ProcessClientInformation(oidcClient, startUrl)
+	accessTokenFile := context.String("session-cache-file")
+	clientInformation := ProcessClientInformation(oidcClient, startUrl, accessTokenFile)
 
 	accountInfo, awsErr := RetrieveAccountInfo(clientInformation, ssoClient, promptSelector)
 	if awsErr != nil && awsErr.StatusCode() == 401 { // unauthorized
-		clientInformation, accountInfo = retryWithNewClientCreds(oidcClient, ssoClient, startUrl, promptSelector)
+		clientInformation, accountInfo = retryWithNewClientCreds(oidcClient, ssoClient, startUrl, promptSelector, accessTokenFile)
 	}
 
 	roleInfo := RetrieveRoleInfo(accountInfo, clientInformation, ssoClient, promptSelector)
@@ -219,10 +226,10 @@ func start(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, contex
 
 }
 
-func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, startUrl string, promptSelector Prompt) (ClientInformation, *sso.AccountInfo) {
-	err := os.Remove(ClientInfoFileDestination())
+func retryWithNewClientCreds(oidcClient ssooidciface.SSOOIDCAPI, ssoClient ssoiface.SSOAPI, startUrl string, promptSelector Prompt, accessTokenFile string) (ClientInformation, *sso.AccountInfo) {
+	err := os.Remove(accessTokenFile)
 	check(err)
-	clientInformation := ProcessClientInformation(oidcClient, startUrl)
+	clientInformation := ProcessClientInformation(oidcClient, startUrl, accessTokenFile)
 	accountInfo, awsErr := RetrieveAccountInfo(clientInformation, ssoClient, promptSelector)
 	check(awsErr)
 	return clientInformation, accountInfo
@@ -249,8 +256,9 @@ func checkMandatoryFlags(context *cli.Context) {
 }
 
 func applyForceFlag(context *cli.Context) {
+	accessTokenFile := context.String("session-cache-file")
 	if context.Bool("force") {
-		err := os.Remove(ClientInfoFileDestination())
+		err := os.Remove(accessTokenFile)
 		if err != nil {
 			zap.S().Infof("Nothing to do, no temporary access token found")
 		}
